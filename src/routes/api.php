@@ -9,7 +9,6 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\PublicacionesController;
 use App\Http\Controllers\DatesAndTermsController;
 use App\Mail\EnvioCorreoMailabre;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,13 +41,12 @@ Route::put('/addStaff/{id}', [StaffController::class, 'updateStaff']);
 Route::delete('/addStaff/{id}', [StaffController::class, 'deleteStaff']);
 
 // Protocol routes
-Route::post('/addProtocol', [ProtocolController::class, 'createProtocol']);
 Route::get('/addProtocol/{id}', [ProtocolController::class, 'readProtocol']);
 Route::get('/addProtocol', [ProtocolController::class, 'readProtocols']);
 Route::put('/addProtocol/{id}', [ProtocolController::class, 'updateProtocol']);
 Route::delete('/addProtocol/{id}', [ProtocolController::class, 'deleteProtocol']);
 Route::get('/getProtocolDoc/{id}', [ProtocolController::class, 'getProtocolDoc'])->middleware('auth:sanctum');
-Route::get('/listProtocols/', [ProtocolController::class, 'listProtocols'])->middleware('auth:sanctum');
+Route::get('/listProtocols', [ProtocolController::class, 'listProtocols'])->middleware('auth:sanctum');
 
 // Email routes
 Route::get('/correo', function () {
@@ -70,6 +68,8 @@ Route::group(['middleware' => ['auth:sanctum', 'update.token.expiry']], function
     Route::post('/createStudent', [UsersController::class, 'createStudent']);
     Route::post('/createStaff', [UsersController::class, 'createStaff']);
     Route::put('/user', [UsersController::class, 'updateUserData']);
+    Route::get('/userExists/{email}', [UsersController::class, 'doesUserExists']);
+    Route::get('/selfEmail', [UsersController::class, 'getSelfEmail']);
 
     Route::post('/dates', [DatesAndTermsController::class, 'createSchoolCycle']);
     Route::get('/dates', [DatesAndTermsController::class, 'getAllSchoolCycles']);
@@ -77,6 +77,8 @@ Route::group(['middleware' => ['auth:sanctum', 'update.token.expiry']], function
     Route::put('/date', [DatesAndTermsController::class, 'updateSchoolCycle']);
     Route::delete('/date', [DatesAndTermsController::class, 'deleteSchoolCycle']);
     Route::get('/checkUpload', [DatesAndTermsController::class, 'checkIfUploadIsAvailable']);
+
+    Route::post('/createProtocol', [ProtocolController::class, 'createProtocol']);
 });
 
 // Verificar Email
